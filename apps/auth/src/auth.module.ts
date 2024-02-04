@@ -23,6 +23,8 @@ import { UserEntity } from './user.entity';
       }),
       inject: [ConfigService],
     }),
+
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [AuthController],
   providers: [AuthService],

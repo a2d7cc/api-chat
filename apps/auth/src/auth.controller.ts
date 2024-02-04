@@ -26,6 +26,6 @@ export class AuthController {
     const message = context.getMessage();
     channel.ack(message);
 
-    return this.authService.postUser()
+    return this.authService.postUser();
   }
 }
