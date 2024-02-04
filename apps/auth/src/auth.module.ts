@@ -3,6 +3,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from './user.entity';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get('POSTGRES_URI'),
-        // autoLoadEntities: true,
-        // synchronize: true // should not be used in production - may lose data
+        autoLoadEntities: true,
+        synchronize: true, // should not be used in production - may lose data
+        entities: [UserEntity],
       }),
       inject: [ConfigService],
     }),
