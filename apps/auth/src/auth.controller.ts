@@ -17,8 +17,15 @@ export class AuthController {
     const message = context.getMessage();
     channel.ack(message);
 
-    return {
-      user: 'USER',
-    };
+    return this.authService.getUsers();
+  }
+
+  @MessagePattern({ cmd: 'post-user' })
+  async postUser(@Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const message = context.getMessage();
+    channel.ack(message);
+
+    return this.authService.postUser()
   }
 }
