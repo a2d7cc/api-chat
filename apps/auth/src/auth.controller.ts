@@ -11,7 +11,7 @@ export class AuthController {
     return this.authService.getHello();
   }
 
-  @MessagePattern({ cmd: 'get-user' })
+  @MessagePattern({ cmd: 'get-users' })
   async getUser(@Ctx() context: RmqContext) {
     const channel = context.getChannelRef();
     const message = context.getMessage();

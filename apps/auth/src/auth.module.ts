@@ -10,7 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       isGlobal: true,
       envFilePath: './.env',
     }),
-    /* 
+
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -20,7 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         // synchronize: true // should not be used in production - may lose data
       }),
       inject: [ConfigService],
-    }), */
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService],
