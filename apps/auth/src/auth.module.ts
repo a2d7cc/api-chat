@@ -1,3 +1,4 @@
+import { dataSourceOptions } from './db/data-source';
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -14,12 +15,18 @@ import { UserEntity } from './user.entity';
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
+      /*       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get('POSTGRES_URI'),
         autoLoadEntities: true,
         synchronize: true, // should not be used in production - may lose data
         entities: [UserEntity],
+      }), */
+
+      useFactory: () => ({
+        ...dataSourceOptions,
+        synchronize: true,
+        autoloadEntities: true,
       }),
       inject: [ConfigService],
     }),

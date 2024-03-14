@@ -6,5 +6,5 @@ export class UserEntity {
   id: number;
 
   @Column()
-  name: string;
+  namePerson: string;
 }
