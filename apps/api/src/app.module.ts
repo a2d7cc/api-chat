@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { ConfigModule } from '@nestjs/config';
+import { SharedModule } from '@app/shared';
 
 @Module({
   imports: [
@@ -10,11 +10,16 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
       isGlobal: true,
       envFilePath: './.env',
     }),
+    SharedModule.registerRmq('AUTH_SERVICE', process.env.RABBITMQ_AUTH_QUEUE),
+    SharedModule.registerRmq(
+      'PRESENCE_SERVICE',
+      process.env.RABBITMQ_PRESENCE_QUEUE,
+    ),
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    {
+    /*     {
       provide: 'AUTH_SERVICE',
       useFactory: (configService: ConfigService) => {
         const USER = configService.get('RABBITMQ_USER');
@@ -34,7 +39,7 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
         });
       },
       inject: [ConfigService],
-    },
+    }, */
   ],
 })
 export class AppModule {}
