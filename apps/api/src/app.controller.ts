@@ -1,6 +1,17 @@
-import { Controller, Get, Inject, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Inject,
+  Param,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientProxy } from '@nestjs/microservices';
+import { NewUserDTO } from 'apps/auth/src/dtos/new-user.dto';
 
 @Controller()
 export class AppController {
@@ -37,6 +48,23 @@ export class AppController {
         cmd: 'get-presence',
       },
       {},
+    );
+  }
+
+  @Post('auth/register')
+  async register(@Body() newUser: NewUserDTO) {
+    console.log('newUser', newUser);
+    const { firstName, lastName, email, password } = newUser;
+    return this.authService.send(
+      {
+        cmd: 'register',
+      },
+      {
+        firstName,
+        lastName,
+        email,
+        password,
+      },
     );
   }
 }
