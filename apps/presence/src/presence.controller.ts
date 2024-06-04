@@ -20,7 +20,6 @@ export class PresenceController {
   @MessagePattern({ cmd: 'get-presence' })
   async getUser(@Ctx() context: RmqContext) {
     this.sharedService.acknowledgeMessage(context);
-    console.log('jwt', this.authGuard.hasJWT());
 
     return this.presenceService.getHello();
   }
