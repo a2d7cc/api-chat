@@ -8,8 +8,6 @@ export class PresenceController {
   constructor(
     private readonly presenceService: PresenceService,
     private readonly sharedService: SharedService,
-    // TEMP
-    private readonly authGuard: AuthGuard,
   ) {}
 
   @Get()
@@ -20,7 +18,6 @@ export class PresenceController {
   @MessagePattern({ cmd: 'get-presence' })
   async getUser(@Ctx() context: RmqContext) {
     this.sharedService.acknowledgeMessage(context);
-
     return this.presenceService.getHello();
   }
 }

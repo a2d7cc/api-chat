@@ -8,9 +8,13 @@ import {
   Post,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientProxy } from '@nestjs/microservices';
+import { AuthGuard } from '@app/shared';
+import { NewUserDTO } from 'apps/auth/src/dtos/new-user.dto';
+import { ExistingUserDTO } from 'apps/auth/src/dtos/existin-user.dto';
 
 @Controller()
 export class AppController {
@@ -40,8 +44,10 @@ export class AppController {
     );
   }
 
+  @UseGuards(AuthGuard)
   @Get('presence')
   async getPresence() {
+    console.log('getPresence');
     return this.presenceService.send(
       {
         cmd: 'get-presence',
@@ -51,12 +57,10 @@ export class AppController {
   }
 
   @Post('auth/register')
-  async register(
-    @Body() firstName: string,
-    @Body() lastName: string,
-    @Body() email: string,
-    @Body() password: string,
-  ) {
+  async register(@Body() newUser: NewUserDTO) {
+    console.log('I am in auth/register');
+    console.log('firstName', newUser);
+    const { firstName, lastName, email, password } = newUser;
     return this.authService.send(
       {
         cmd: 'register',
@@ -71,7 +75,8 @@ export class AppController {
   }
 
   @Post('auth/login')
-  async login(@Body() email: string, @Body() password: string) {
+  async login(@Body() existingUser: ExistingUserDTO) {
+    const { email, password } = existingUser;
     return this.authService.send(
       {
         cmd: 'login',

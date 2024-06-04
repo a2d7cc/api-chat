@@ -59,7 +59,7 @@ export class AuthController {
     return this.authService.login(existingUser);
   }
 
-  @MessagePattern({ cmd: 'vertify-jwt' })
+  @MessagePattern({ cmd: 'verify-jwt' })
   @UseGuards(JwtGuard)
   async vertifyJwt(
     @Ctx() context: RmqContext,
