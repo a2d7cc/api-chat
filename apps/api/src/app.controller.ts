@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientProxy } from '@nestjs/microservices';
-import { NewUserDTO } from 'apps/auth/src/dtos/new-user.dto';
 
 @Controller()
 export class AppController {
@@ -52,9 +51,12 @@ export class AppController {
   }
 
   @Post('auth/register')
-  async register(@Body() newUser: NewUserDTO) {
-    console.log('newUser', newUser);
-    const { firstName, lastName, email, password } = newUser;
+  async register(
+    @Body() firstName: string,
+    @Body() lastName: string,
+    @Body() email: string,
+    @Body() password: string,
+  ) {
     return this.authService.send(
       {
         cmd: 'register',
@@ -62,6 +64,19 @@ export class AppController {
       {
         firstName,
         lastName,
+        email,
+        password,
+      },
+    );
+  }
+
+  @Post('auth/login')
+  async login(@Body() email: string, @Body() password: string) {
+    return this.authService.send(
+      {
+        cmd: 'login',
+      },
+      {
         email,
         password,
       },
