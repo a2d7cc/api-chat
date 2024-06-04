@@ -8,6 +8,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserEntity } from './user.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtGuard } from './jwt.guard';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -21,10 +23,10 @@ import { JwtModule } from '@nestjs/jwt';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
-        signOptions: {expiresIn: '3600s'},        
+        signOptions: { expiresIn: '3600s' },
       }),
-      inject: [ConfigService]
-    })
+      inject: [ConfigService],
+    }),
 
     /*     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -41,6 +43,6 @@ import { JwtModule } from '@nestjs/jwt';
     TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtGuard, JwtStrategy],
 })
 export class AuthModule {}
