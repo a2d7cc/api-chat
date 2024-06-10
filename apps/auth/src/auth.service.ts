@@ -1,25 +1,34 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from './user.entity';
-import { Repository } from 'typeorm';
 import { NewUserDTO } from './dtos/new-user.dto';
 import * as bcrypt from 'bcrypt';
 import { ExistingUserDTO } from './dtos/existin-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { UserRepositoryInterface } from '@app/shared/interfaces/users.repository.interface';
+import { UserEntity } from '@app/shared/entities/user.entity';
+import { AuthServiceInterface } from './interfaces/auth.service.interface';
 @Injectable()
-export class AuthService {
+export class AuthService implements AuthServiceInterface {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    // @InjectRepository(UserEntity)
+    // private readonly userRepository: Repository<UserEntity>,
+    @Inject('UsersRepositoryInterface')
+    private readonly userRepository: UserRepositoryInterface,
     private readonly jwtService: JwtService,
   ) {}
+  async getUserById(id: number): Promise<UserEntity> {
+    return await this.userRepository.findOneById(id);
+  }
+  async findById(id: number): Promise<UserEntity> {
+    return this.userRepository.findOneById(id);
+  }
 
   async getUsers() {
-    return await this.userRepository.find();
+    return await this.userRepository.findAll();
   }
 
   async postUser() {
@@ -32,7 +41,7 @@ export class AuthService {
   }
 
   async findByEmail(email: string): Promise<UserEntity> {
-    return this.userRepository.findOne({
+    return this.userRepository.findByCondition({
       where: { email },
       select: ['id', 'firstName', 'lastName', 'email', 'password'],
     });
@@ -98,7 +107,7 @@ export class AuthService {
 
     const jwt = await this.jwtService.signAsync({ user });
 
-    return { token: jwt };
+    return { token: jwt, user };
   }
 
   async verifyJwt(jwt: string): Promise<{ exp: number }> {

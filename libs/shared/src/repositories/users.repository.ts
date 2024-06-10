@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { BaseAbstractRepository } from './base/base.abstract.repository';
 
 import { UserEntity } from '../entities/user.entity';
-import { UserRepositoryInterface } from '../interfaces/user.repository.interface';
+import { UserRepositoryInterface } from '../interfaces/users.repository.interface';
 
 @Injectable()
 export class UsersRepository
