@@ -1,15 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Headers,
-  Inject,
-  Param,
-  Post,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthGuard } from '@app/shared';
@@ -47,7 +36,6 @@ export class AppController {
   @UseGuards(AuthGuard)
   @Get('presence')
   async getPresence() {
-    console.log('getPresence');
     return this.presenceService.send(
       {
         cmd: 'get-presence',
@@ -58,8 +46,6 @@ export class AppController {
 
   @Post('auth/register')
   async register(@Body() newUser: NewUserDTO) {
-    console.log('I am in auth/register');
-    console.log('firstName', newUser);
     const { firstName, lastName, email, password } = newUser;
     return this.authService.send(
       {
