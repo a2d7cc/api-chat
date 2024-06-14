@@ -16,6 +16,7 @@ import { JwtGuard } from './jwt.guard';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersRepository } from '@app/shared/repositories/users.repository';
 import { FriendRequestRepository } from '@app/shared/repositories/friend-request.repository';
+import { FriendRequestEntity } from '@app/shared/entities/friend-request.entity';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { FriendRequestRepository } from '@app/shared/repositories/friend-request
     }), */
 
     TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([FriendRequestEntity]),
   ],
   controllers: [AuthController],
   providers: [

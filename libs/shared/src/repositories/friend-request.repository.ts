@@ -2,9 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BaseAbstractRepository } from './base/base.abstract.repository';
-
-import { UserEntity } from '../entities/user.entity';
-
 import { FriendRequestEntity } from '../entities/friend-request.entity';
 import { FriendRequestRepositoryInterface } from '../interfaces/friend-request.repository.interface';
 
@@ -14,7 +11,7 @@ export class FriendRequestRepository
   implements FriendRequestRepositoryInterface
 {
   constructor(
-    @InjectRepository(UserEntity)
+    @InjectRepository(FriendRequestEntity)
     private readonly friendRequestEntity: Repository<FriendRequestEntity>,
   ) {
     super(friendRequestEntity);

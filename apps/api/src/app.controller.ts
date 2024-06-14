@@ -36,6 +36,8 @@ export class AppController {
       throw new BadRequestException();
     }
 
+    console.log('req.user', req.user);
+
     return this.authService.send(
       {
         cmd: 'add-friend',
@@ -65,7 +67,7 @@ export class AppController {
     );
   }
 
-  @Get('auth')
+  @Get('users')
   async getUsers() {
     return this.authService.send(
       {
