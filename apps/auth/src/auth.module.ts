@@ -15,6 +15,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtGuard } from './jwt.guard';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersRepository } from '@app/shared/repositories/users.repository';
+import { FriendRequestRepository } from '@app/shared/repositories/friend-request.repository';
 
 @Module({
   imports: [
@@ -58,6 +59,10 @@ import { UsersRepository } from '@app/shared/repositories/users.repository';
     {
       provide: 'UsersRepositoryInterface',
       useClass: UsersRepository,
+    },
+    {
+      provide: 'FriendRequestRepositoryInterface',
+      useClass: FriendRequestRepository,
     },
     {
       provide: 'SharedServiceInterface',
