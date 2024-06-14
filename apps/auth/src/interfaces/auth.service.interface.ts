@@ -17,7 +17,7 @@ export interface AuthServiceInterface {
     token: string;
     user: UserEntity;
   }>;
-  verifyJwt(jwt: string): Promise<{ exp: number }>;
+  verifyJwt(jwt: string): Promise<{ user: UserEntity; exp: number }>;
   getUserFromHeader(jwt: string): Promise<UserJwt>;
   addFriend(userId: number, friendId: number): Promise<FriendRequestEntity>;
   getFriends(userId: number): Promise<FriendRequestEntity[]>;
