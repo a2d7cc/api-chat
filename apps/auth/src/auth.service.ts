@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Inject,
   Injectable,
@@ -8,9 +9,12 @@ import { NewUserDTO } from './dtos/new-user.dto';
 import * as bcrypt from 'bcrypt';
 import { ExistingUserDTO } from './dtos/existin-user.dto';
 import { JwtService } from '@nestjs/jwt';
-import { UserRepositoryInterface } from '@app/shared/interfaces/users.repository.interface';
 import { UserEntity } from '@app/shared/entities/user.entity';
 import { AuthServiceInterface } from './interfaces/auth.service.interface';
+import { UserRepositoryInterface } from '@app/shared';
+import { UserJwt } from '@app/shared/interfaces/user-jwt.interface';
+import { FriendRequestRepository } from '@app/shared/repositories/friend-request.repository';
+import { FriendRequestEntity } from '@app/shared/entities/friend-request.entity';
 @Injectable()
 export class AuthService implements AuthServiceInterface {
   constructor(
@@ -18,6 +22,8 @@ export class AuthService implements AuthServiceInterface {
     // private readonly userRepository: Repository<UserEntity>,
     @Inject('UsersRepositoryInterface')
     private readonly userRepository: UserRepositoryInterface,
+    @Inject('FriendRequestRepositoryInterface')
+    private readonly friendRequestRepository: FriendRequestRepository,
     private readonly jwtService: JwtService,
   ) {}
   async getUserById(id: number): Promise<UserEntity> {
@@ -110,6 +116,25 @@ export class AuthService implements AuthServiceInterface {
     return { token: jwt, user };
   }
 
+  async addFriend(
+    userId: number,
+    friendId: number,
+  ): Promise<FriendRequestEntity> {
+    const creator = await this.userRepository.findOneById(userId);
+    const receiver = await this.userRepository.findOneById(friendId);
+
+    return await this.friendRequestRepository.save({ creator, receiver });
+  }
+
+  async getFriends(userId: number): Promise<FriendRequestEntity[]> {
+    const creator = await this.userRepository.findOneById(userId);
+
+    return await this.friendRequestRepository.findWithRelations({
+      where: [{ creator }, { receiver: creator }],
+      relations: ['creator', 'receiver'],
+    });
+  }
+
   async verifyJwt(jwt: string): Promise<{ exp: number }> {
     if (!jwt) {
       throw new UnauthorizedException();
@@ -120,6 +145,18 @@ export class AuthService implements AuthServiceInterface {
       return { exp };
     } catch (error) {
       throw new UnauthorizedException();
+    }
+  }
+
+  async getUserFromHeader(jwt: string): Promise<UserJwt> {
+    if (!jwt) {
+      return;
+    }
+
+    try {
+      return this.jwtService.decode(jwt) as UserJwt;
+    } catch (error) {
+      throw new BadRequestException();
     }
   }
 
