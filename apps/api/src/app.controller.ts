@@ -13,10 +13,9 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientProxy } from '@nestjs/microservices';
-import { AuthGuard } from '@app/shared';
+import { AuthGuard, UserInterceptor } from '@app/shared';
 import { NewUserDTO } from 'apps/auth/src/dtos/new-user.dto';
 import { ExistingUserDTO } from 'apps/auth/src/dtos/existin-user.dto';
-import { UserInterceptor } from '@app/shared/interceptors/user.interceptor';
 
 @Controller()
 export class AppController {

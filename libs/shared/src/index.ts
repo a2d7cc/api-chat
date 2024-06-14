@@ -16,3 +16,5 @@ export * from './repositories/base/base.abstract.repository';
 export * from './repositories/base/base.interface.repository';
 // repositories
 export * from './repositories/users.repository';
+// interceptors
+export * from './interceptors/user.interceptor';
