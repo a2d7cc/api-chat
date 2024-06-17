@@ -75,3 +75,12 @@ services:
       - .env
     ports:
       - '15432:80'
+  
+  redis:
+    image: redis
+    env_file:
+      - .env
+    ports:
+      - 6379:6379
+    volumes:
+        - ./redis/data:/data
