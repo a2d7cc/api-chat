@@ -12,7 +12,7 @@ export class RedisService {
   }
 
   async set(key: string, value: unknown) {
-    console.log(`Set ${value} in Redis`);
+    console.log(`Set ${JSON.stringify(value)} in Redis`);
     return await this.cache.set(key, value);
   }
 

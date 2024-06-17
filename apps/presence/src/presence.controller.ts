@@ -1,4 +1,3 @@
-import { RedisService } from './../../../libs/shared/src/services/redis.service';
 import { Controller, Get, UseInterceptors } from '@nestjs/common';
 import { PresenceService } from './presence.service';
 import { Ctx, MessagePattern, RmqContext } from '@nestjs/microservices';
